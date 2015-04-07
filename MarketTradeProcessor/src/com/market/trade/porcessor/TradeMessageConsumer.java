@@ -18,14 +18,10 @@ import javax.jms.TextMessage;
 public class TradeMessageConsumer implements MessageListener {
 	@Resource
 	private MessageDrivenContext mdc;
-	private TradeMessageProcessor tradeMessageProcessor;
 	/**
 	 * Default constructor. 
 	 */
 	public TradeMessageConsumer() {
-		if(tradeMessageProcessor == null){
-			tradeMessageProcessor = new TradeMessageProcessor();
-		}
 	}
 
 	/**
@@ -40,7 +36,7 @@ public class TradeMessageConsumer implements MessageListener {
 				msg = (TextMessage) message;
 				System.out.println("MESSAGE BEAN: Message received: " +
 						msg.getText());
-				TradeMessageProcessorFlat.writeMessage(msg.getText());
+				TradeMessageProcessorFlat.processMessage(msg.getText());
 			} else {
 				System.out.println("Message of wrong type: " +
 						message.getClass().getName());
