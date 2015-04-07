@@ -40,14 +40,11 @@ public class TradeMessagePusher {
 	public void showTime(Session session) {
 		logger.info("Connected to Trade Server with session id "
 				+ session.getId());
+		sendTimeToAll(session);
 	}
 
 	private void sendTimeToAll(Session session) {
 		tradeSocketSessions = session.getOpenSessions();
-		if (!populateList() && (content == null || content.size() == 0)) {
-			logger.info("Graphical content generation failed");
-			return;
-		}
 		for (Session sess : tradeSocketSessions) {
 			try {
 				StringBuilder sb = new StringBuilder();
@@ -62,12 +59,15 @@ public class TradeMessagePusher {
 				sb.append("\t\t<td>" + "Volume" + "</td>\n");
 				sb.append("\t</tr>\n");
 
-				for (List<String> row : content) {
-					sb.append("\t<tr>\n");
-					for (String cell : row) {
-						sb.append("\t\t<td>" + cell + "</td>\n");
+				
+				if (populateList() && content != null && content.size() > 0) {
+					for (List<String> row : content) {
+						sb.append("\t<tr>\n");
+						for (String cell : row) {
+							sb.append("\t\t<td>" + cell + "</td>\n");
+						}
+						sb.append("\t</tr>\n");
 					}
-					sb.append("\t</tr>\n");
 				}
 				sb.append("\t<tr>\n");
 				sb.append("\t\t<td>" + "Last update at  "
